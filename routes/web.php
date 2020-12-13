@@ -16,3 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::resource('/classes', 'ClassesInfoController'); //班級頁面_原XW08000
+
+Route::resource('/students', 'StudentsInfoController'); //學生頁面_原BW01000
+// Route::post('/classes/store', 'ClassesInfoController@store');
