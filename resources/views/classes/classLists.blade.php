@@ -107,13 +107,13 @@
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 班級名稱 </label>
             <div class="col-sm-9">
-                <input type="text" name="name" id="form-field-1" class="form-control" />
+                <input type="text" name="name" id="form-field-1" class="form-control" required />
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 帶班老師姓名 </label>
             <div class="col-sm-9">
-                <select name="teacher_id" class="form-control" id="form-field-select-1">
+                <select name="teacher_id" class="form-control" required id="form-field-select-1">
                     <option value="">請選擇</option>
                 </select>
             </div>
@@ -121,7 +121,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 助教姓名 </label>
             <div class="col-sm-9">
-                <select name="teacher_assistant_id" class="form-control" id="form-field-select-1">
+                <select name="teacher_assistant_id" class="form-control" required id="form-field-select-1">
                     <option value="">請選擇</option>
                 </select>
             </div>
@@ -129,7 +129,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 代課老師 </label>
             <div class="col-sm-9">
-                <select name="substitute_teacher_id" class="form-control" id="form-field-select-1">
+                <select name="substitute_teacher_id" class="form-control" required id="form-field-select-1">
                     <option value="">請選擇</option>
                 </select>
             </div>
@@ -137,7 +137,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-select-1">使用教材1</label>
             <div class="col-sm-9">
-            <select name="teaching_material_1" class="form-control" id="form-field-select-1">
+            <select name="teaching_material_1" class="form-control" required id="form-field-select-1">
                 <option value="">請選擇</option>
             </select>
             </div>
@@ -145,7 +145,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-select-1">使用教材2</label>
             <div class="col-sm-9">
-            <select name="teaching_material_2" class="form-control" id="form-field-select-1">
+            <select name="teaching_material_2" class="form-control" required id="form-field-select-1">
                 <option value="">請選擇</option>
             </select>
             </div>
@@ -153,7 +153,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-select-1">使用教材3</label>
             <div class="col-sm-9">
-            <select name="teaching_material_3" class="form-control" id="form-field-select-1">
+            <select name="teaching_material_3" class="form-control" required id="form-field-select-1">
                 <option value="">請選擇</option>
             </select>
             </div>
@@ -161,7 +161,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-select-1">使用教材4</label>
             <div class="col-sm-9">
-            <select name="teaching_material_4" class="form-control" id="form-field-select-1">
+            <select name="teaching_material_4" class="form-control" required id="form-field-select-1">
                 <option value="">請選擇</option>
             </select>
             </div>
@@ -169,25 +169,25 @@
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 本期開始日 </label>
             <div class="col-sm-9">
-                <input type="date" name="period_start_date" id="form-field-1" class="form-control" />
+                <input type="date" name="period_start_date" id="form-field-1" class="form-control" required />
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 本期結束日 </label>
             <div class="col-sm-9">
-                <input type="date" name="period_end_date" id="form-field-1" class="form-control" />
+                <input type="date" name="period_end_date" id="form-field-1" class="form-control" required />
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 上課日 </label>
             <div class="col-sm-9">
-                <input type="date" name="calss_start_date" id="form-field-1" class="form-control" />
+                <input type="date" name="calss_start_date" id="form-field-1" class="form-control" required />
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 上課時段 </label>
             <div class="col-sm-9">
-                <input type="text" name="class_schedule" id="form-field-1" class="form-control" />
+                <input type="text" name="class_schedule" id="form-field-1" class="form-control" required />
             </div>
         </div>
 
@@ -218,13 +218,13 @@
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 班級名稱 </label>
             <div class="col-sm-9">
-                <input type="text" name="name" id="form-field-1" value="{{ $class->name }}" class="form-control" />
+                <input type="text" name="name" id="form-field-1" value="{{ $class->name }}" class="form-control" required />
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 帶班老師姓名 </label>
             <div class="col-sm-9">
-                <select name="teacher_id" class="form-control" value="{{ $class->teacher_id }}" id="form-field-select-1">
+                <select name="teacher_id" class="form-control" required value="{{ $class->teacher_id }}" id="form-field-select-1">
                     <option value="">請選擇</option>
                 </select>
             </div>
@@ -232,7 +232,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 助教姓名 </label>
             <div class="col-sm-9">
-                <select name="teacher_assistant_id" class="form-control" value="{{ $class->teacher_assistant_id }}" id="form-field-select-1">
+                <select name="teacher_assistant_id" class="form-control" required value="{{ $class->teacher_assistant_id }}" id="form-field-select-1">
                     <option value="">請選擇</option>
                 </select>
             </div>
@@ -240,7 +240,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 代課老師 </label>
             <div class="col-sm-9">
-                <select name="substitute_teacher_id" class="form-control" value="{{ $class->substitute_teacher_id }}" id="form-field-select-1">
+                <select name="substitute_teacher_id" class="form-control" required value="{{ $class->substitute_teacher_id }}" id="form-field-select-1">
                     <option value="">請選擇</option>
                 </select>
             </div>
@@ -248,7 +248,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-select-1">使用教材1</label>
             <div class="col-sm-9">
-            <select name="teaching_material_1" class="form-control" value="{{ $class->teaching_material_1 }}" id="form-field-select-1">
+            <select name="teaching_material_1" class="form-control" required value="{{ $class->teaching_material_1 }}" id="form-field-select-1">
                 <option value="">請選擇</option>
             </select>
             </div>
@@ -256,7 +256,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-select-1">使用教材2</label>
             <div class="col-sm-9">
-            <select name="teaching_material_2" class="form-control" value="{{ $class->teaching_material_2 }}" id="form-field-select-1">
+            <select name="teaching_material_2" class="form-control" required value="{{ $class->teaching_material_2 }}" id="form-field-select-1">
                 <option value="">請選擇</option>
             </select>
             </div>
@@ -264,7 +264,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-select-1">使用教材3</label>
             <div class="col-sm-9">
-            <select name="teaching_material_3" class="form-control" value="{{ $class->teaching_material_3 }}" id="form-field-select-1">
+            <select name="teaching_material_3" class="form-control" required value="{{ $class->teaching_material_3 }}" id="form-field-select-1">
                 <option value="">請選擇</option>
             </select>
             </div>
@@ -272,7 +272,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-select-1">使用教材4</label>
             <div class="col-sm-9">
-            <select name="teaching_material_4" class="form-control" value="{{ $class->teaching_material_4 }}" id="form-field-select-1">
+            <select name="teaching_material_4" class="form-control" required value="{{ $class->teaching_material_4 }}" id="form-field-select-1">
                 <option value="">請選擇</option>
             </select>
             </div>
@@ -280,25 +280,25 @@
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 本期開始日 </label>
             <div class="col-sm-9">
-                <input type="date" name="period_start_date" id="form-field-1" value="{{ $class->period_start_date }}" class="form-control" />
+                <input type="date" name="period_start_date" id="form-field-1" value="{{ $class->period_start_date }}" class="form-control" required />
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 本期結束日 </label>
             <div class="col-sm-9">
-                <input type="date" name="period_end_date" id="form-field-1" value="{{ $class->period_end_date }}" class="form-control" />
+                <input type="date" name="period_end_date" id="form-field-1" value="{{ $class->period_end_date }}" class="form-control" required />
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 上課日 </label>
             <div class="col-sm-9">
-                <input type="date" name="calss_start_date" id="form-field-1" value="{{ $class->class_start_date }}" class="form-control" />
+                <input type="date" name="calss_start_date" id="form-field-1" value="{{ $class->class_start_date }}" class="form-control" required />
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 上課時段 </label>
             <div class="col-sm-9">
-                <input type="text" name="class_schedule" id="form-field-1" value="{{ $class->class_schedule }}" class="form-control" />
+                <input type="text" name="class_schedule" id="form-field-1" value="{{ $class->class_schedule }}" class="form-control" required />
             </div>
         </div>
 

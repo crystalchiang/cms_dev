@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use App\UsersStudenInfo;
+use App\UsersStudentInfo;
+use App\UsersParentInfo;
+use App\User;
+
+use Validator;
 
 class StudentsInfoController extends Controller
 {
@@ -14,8 +19,37 @@ class StudentsInfoController extends Controller
      */
     public function index()
     {
-        $students = UsersStudenInfo::all();
-        return view('students.studentLists')->with('students', $students);
+        $students = DB::table('users_student_infos as s')
+        ->join('users as u', 'u.id', '=', 's.user_id')
+        ->select('u.email', 'u.name', 's.*')
+        ->get()
+        ->toArray();
+        
+        foreach($students as $key => $value){
+            $parent_a = DB::table('users_parent_infos as p')
+            ->join('users as u', 'u.id', '=', 'p.user_id')
+            ->where('p.id',$value->parent_1_id)
+            ->select('u.name as account', 'p.*')
+            ->get()
+            ->toArray();
+
+            $data[$key]['student'] = $value; 
+            $data[$key]['parents'][] = $parent_a[0]; 
+
+            if($value->parent_2_id){
+                $parent_b = DB::table('users_parent_infos as p')
+                ->join('users as u', 'u.id', '=', 'p.user_id')
+                ->where('p.id',$value->parent_2_id)
+                ->select('u.name as account', 'p.*')
+                ->get()
+                ->toArray();
+                $data[$key]['parents'][] = $parent_b[0];
+            }
+        }
+// echo "<pre>";
+// print_r($data);
+// echo "<pre>";
+        return view('students.studentLists')->with('students', $data);
     }
 
     /**
@@ -43,17 +77,104 @@ class StudentsInfoController extends Controller
         //     'calss_start_date' => 'required',
         //     'class_schedule' => 'required|string|max:30',
         // ]);
+        $userAccount = User::whereIn('name', [$request->name,$request->parent_a_username,$request->parent_b_username])
+            ->first();
 
-        $class = new UsersStudenInfo();
-        $class->name = $request->name;
-        $class->period_start_date = $request->period_start_date;
-        $class->period_end_date = $request->period_end_date;
-        $class->calss_start_date = $request->calss_start_date;
-        $class->class_schedule = $request->class_schedule;
-        $class->save();
+        // $member = $this->getMemberByEmail($email);
+
+        if (!empty($userAccount)) {
+            return redirect(route('students.index'));
+        }
+
+        $validator = Validator::make($request->all(), [
+            'parent_a_username' => 'required|string|between:2,100|unique:users,name',
+            'parent_a_name' => 'required|string|max:100',
+            'parent_a_email' => 'required|string|email|max:100|unique:users,email',
+            'parent_a_password' => 'required|string|min:6',
+            'parent_a_line' => 'required|string|max:100',
+            'parent_b_username' => 'required|string|between:2,100|unique:users,name',
+            'parent_b_name' => 'required|string|max:100',
+            'parent_b_email' => 'required|string|email|max:100|unique:users,email',
+            'parent_b_password' => 'required|string|min:6',
+            'parent_b_line' => 'required|string|max:100',
+            'name' => 'required|string|between:2,100|unique:users,name',
+            'chinese_name' => 'required|string|max:100',
+            'english_name' => 'required|string|max:100',
+            'email' => 'required|string|email|max:100|unique:users,email',
+            'password' => 'required|string|min:6',
+            'line' => 'required|string|max:100',
+            'start_date' => 'required',
+            'expire_date' => 'required',
+            'other' => 'required|string|max:100',
+        ]);
+
+        if($validator->fails()){
+            return redirect(route('students.index'));
+        }
+
+        try {
+            DB::beginTransaction();
+            
+            $parent_a_id = DB::table('users')->insertGetId([ 
+                'name' => $request->parent_a_username,
+                'email' => $request->parent_a_email,
+                'password' => bcrypt($request->parent_a_password), 
+                'role_id' => 7
+            ]);
+  
+            $parent_info_a = DB::table('users_parent_infos')->insertGetId([ 
+                'user_id' => $parent_a_id,
+                'name' => $request->parent_a_name,
+                'telephone' => $request->parent_a_telephone,
+                'line' => $request->parent_a_line,
+                'email' => $request->parent_a_email,
+                'status' => 1
+            ]);
+
+            $parent_b_id = DB::table('users')->insertGetId([ 
+                'name' => $request->parent_b_username,
+                'email' => $request->parent_b_email,
+                'password' => bcrypt($request->parent_b_password), 
+                'role_id' => 7
+            ]);
+
+            $parent_info_b = DB::table('users_parent_infos')->insertGetId([ 
+                'user_id' => $parent_b_id,
+                'name' => $request->parent_b_name,
+                'telephone' => $request->parent_b_telephone,
+                'line' => $request->parent_b_line,
+                'email' => $request->parent_b_email,
+                'status' => 1
+            ]);
+
+            $student_id = DB::table('users')->insertGetId([ 
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => bcrypt($request->password), 
+                'role_id' => 8
+            ]);
+
+            $student = DB::table('users_student_infos')->insert([
+                'user_id' => $student_id,
+                'class_id' => $request->class_id ? $request->class_id : null,
+                'chinese_name' => $request->chinese_name,
+                'english_name' => $request->english_name,
+                'line' => $request->line,
+                'parent_1_id' => $parent_info_a,
+                'parent_2_id' => $parent_info_b ? $parent_info_b : null,
+                'other' => $request->other,
+                'start_date' => $request->start_date,
+                'expire_date' => $request->expire_date,
+                'status' => 1
+            ]);
+
+            DB::commit();
+
+        } catch(\Exception $e) {
+            DB::rollBack();
+        }
 
         return redirect(route('students.index'));
-
     }
 
     /**
@@ -85,15 +206,116 @@ class StudentsInfoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ClassesInfo $class)
+    public function update(Request $request, $id)
     {
-        //
-        $class->name = $request->name;
-        $class->period_start_date = $request->period_start_date;
-        $class->period_end_date = $request->period_end_date;
-        $class->calss_start_date = $request->calss_start_date;
-        $class->class_schedule = $request->class_schedule;
-        $class->save();
+        $validator = Validator::make($request->all(), [
+            'parent_a_name' => 'required|string|max:100',
+            'parent_a_email' => 'required|string|email|max:100',
+            'parent_a_line' => 'required|string|max:100',
+            'parent_b_name' => 'required|string|max:100',
+            'parent_b_email' => 'required|string|email|max:100',
+            'parent_b_line' => 'required|string|max:100',
+            'chinese_name' => 'required|string|max:100',
+            'english_name' => 'required|string|max:100',
+            'email' => 'required|string|email|max:100',
+            'line' => 'required|string|max:100',
+            'start_date' => 'required',
+            'expire_date' => 'required',
+            'other' => 'required|string|max:100',
+        ]);
+
+        if($validator->fails()){
+            return redirect(route('students.index'));
+        }
+
+        if($request->parent_a_password){
+            $validator = Validator::make($request->parent_a_password, [
+                'parent_a_password' => 'required|string|min:6',
+            ]);
+
+            if($validator->fails()){
+                return redirect(route('students.index'));
+            }
+        }
+
+        if($request->parent_b_password){
+            $validator = Validator::make($request->parent_b_password, [
+                'parent_b_password' => 'required|string|min:6',
+            ]);
+
+            if($validator->fails()){
+                return redirect(route('students.index'));
+            }
+        }
+
+        try {
+            DB::beginTransaction();
+            
+            //更新父母Ａ資料
+            $parent_a_data['email'] = $request->parent_a_email;
+
+            if($request->parent_a_password){
+                $parent_a_data['password'] = bcrypt($request->parent_a_password);
+            }
+
+            DB::table('users')
+            ->where('id', $request->parent_a_user_id)
+            ->update($parent_a_data);
+
+            $parent_a_data['name'] = $request->parent_a_name;
+            $parent_a_data['line'] = $request->parent_a_line;
+            $parent_a_data['telephone'] = $request->parent_a_telephone;
+
+            DB::table('users_parent_infos')
+            ->where('id', $request->parent_a_id)
+            ->update($parent_a_data);
+
+            //更新父母B資料
+            $parent_b_data['email'] = $request->parent_b_email;
+
+            if($request->parent_b_password){
+                $parent_b_data['password'] = bcrypt($request->parent_b_password);
+            }
+
+            DB::table('users')
+            ->where('id', $request->parent_b_user_id)
+            ->update($parent_b_data);
+
+            $parent_b_data['name'] = $request->parent_b_name;
+            $parent_b_data['line'] = $request->parent_b_line;
+            $parent_b_data['telephone'] = $request->parent_b_telephone;
+
+            DB::table('users_parent_infos')
+            ->where('id', $request->parent_b_id)
+            ->update($parent_b_data);
+
+            //更新學生
+            $student_data = [
+                'chinese_name' => $request->chinese_name,
+                'english_name' => $request->english_name,
+                'line' => $request->line,
+                'other' => $request->other,
+                'start_date' => $request->start_date,
+                'expire_date' => $request->expire_date,
+            ];
+
+            if($request->password){
+                $student_data['password'] = bcrypt($request->password);
+            }
+
+            DB::table('users')
+            ->where('id', $request->student_user_id)
+            ->update(['email' => $request->email]);
+
+            DB::table('users_student_infos')
+            ->where('id', $request->student_id)
+            ->update($student_data);
+
+            DB::commit();
+
+        } catch(\Exception $e) {
+            DB::rollBack();
+        }
 
         return redirect(route('students.index'));
     }

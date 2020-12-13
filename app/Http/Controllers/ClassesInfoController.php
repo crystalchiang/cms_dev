@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\ClassesInfo;
 
+use Validator;
+
 class ClassesInfoController extends Controller
 {
     /**
@@ -43,6 +45,18 @@ class ClassesInfoController extends Controller
         //     'calss_start_date' => 'required',
         //     'class_schedule' => 'required|string|max:30',
         // ]);
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:30',
+            'period_start_date' => 'required',
+            'period_end_date' => 'required',
+            'calss_start_date' => 'required',
+            'class_schedule' => 'required|string|max:30',
+        ]);
+
+        if($validator->fails()){
+            return redirect(route('classes.index'));
+        }
 
         $class = new ClassesInfo();
         $class->name = $request->name;
