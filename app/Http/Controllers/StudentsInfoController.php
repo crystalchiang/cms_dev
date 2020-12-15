@@ -119,7 +119,7 @@ class StudentsInfoController extends Controller
                 'name' => $request->parent_a_username,
                 'email' => $request->parent_a_email,
                 'password' => bcrypt($request->parent_a_password), 
-                'role_id' => 7
+                'menuroles' => 'parent'
             ]);
   
             $parent_info_a = DB::table('users_parent_infos')->insertGetId([ 
@@ -135,7 +135,7 @@ class StudentsInfoController extends Controller
                 'name' => $request->parent_b_username,
                 'email' => $request->parent_b_email,
                 'password' => bcrypt($request->parent_b_password), 
-                'role_id' => 7
+                'menuroles' => 'parent'
             ]);
 
             $parent_info_b = DB::table('users_parent_infos')->insertGetId([ 
@@ -151,7 +151,7 @@ class StudentsInfoController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => bcrypt($request->password), 
-                'role_id' => 8
+                'menuroles' => 'student'
             ]);
 
             $student = DB::table('users_student_infos')->insert([

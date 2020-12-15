@@ -15,7 +15,7 @@ class UsersTableSeeder extends Seeder
             'name' => 'SuperAdmin',
             'email' => 'tophet0929@gmail.com',
             'password' => bcrypt('123456'),
-            'role_id' => 1
+            'menuroles' => 'admin'
         ]);
     }
 }
