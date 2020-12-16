@@ -73,17 +73,8 @@ class StudentsInfoController extends Controller
      */
     public function store(Request $request)
     {
-        // $data = $this->validate($request, [
-        //     'name' => 'required|string|max:30',
-        //     'period_start_date' => 'required',
-        //     'period_end_date' => 'required',
-        //     'calss_start_date' => 'required',
-        //     'class_schedule' => 'required|string|max:30',
-        // ]);
         $userAccount = User::whereIn('name', [$request->name,$request->parent_a_username,$request->parent_b_username])
             ->first();
-
-        // $member = $this->getMemberByEmail($email);
 
         if (!empty($userAccount)) {
             return redirect(route('students.index'));

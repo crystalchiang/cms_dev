@@ -279,7 +279,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 學生密碼 </label>
             <div class="col-sm-9">
-                <input type="password" name="password" id="form-field-1" class="form-control" required />
+                <input type="password" name="password" id="form-field-1" class="form-control" />
             </div>
         </div>
         <div class="form-group">
@@ -309,7 +309,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 家長密碼1 </label>
             <div class="col-sm-9">
-                <input type="password" name="parent_a_password" id="form-field-1" class="form-control" required />
+                <input type="password" name="parent_a_password" id="form-field-1" class="form-control" />
             </div>
         </div>
         <div class="form-group">
@@ -345,7 +345,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 家長密碼2 </label>
             <div class="col-sm-9">
-                <input type="password" name="parent_b_password" id="form-field-1" class="form-control" required />
+                <input type="password" name="parent_b_password" id="form-field-1" class="form-control" />
             </div>
         </div>
         <div class="form-group">
