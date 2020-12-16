@@ -15,6 +15,6 @@ class UsersStudentInfo extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id','name','line','telephone','created_at','update_at','status','email'
+        'user_id','name','line','telephone','created_at','update_at','email'
     ];
 }

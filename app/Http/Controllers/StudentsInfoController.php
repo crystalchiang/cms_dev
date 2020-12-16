@@ -24,17 +24,19 @@ class StudentsInfoController extends Controller
         ->select('u.email', 'u.name', 's.*')
         ->get()
         ->toArray();
-        
+
+        $data = [];
+        // dd($students);
         foreach($students as $key => $value){
             $parent_a = DB::table('users_parent_infos as p')
             ->join('users as u', 'u.id', '=', 'p.user_id')
             ->where('p.id',$value->parent_1_id)
             ->select('u.name as account', 'p.*')
             ->get()
-            ->toArray();
+            ->first();
 
             $data[$key]['student'] = $value; 
-            $data[$key]['parents'][] = $parent_a[0]; 
+            $data[$key]['parents'][] = $parent_a; 
 
             if($value->parent_2_id){
                 $parent_b = DB::table('users_parent_infos as p')
@@ -42,10 +44,11 @@ class StudentsInfoController extends Controller
                 ->where('p.id',$value->parent_2_id)
                 ->select('u.name as account', 'p.*')
                 ->get()
-                ->toArray();
-                $data[$key]['parents'][] = $parent_b[0];
+                ->first();
+                $data[$key]['parents'][] = $parent_b;
             }
         }
+        
 // echo "<pre>";
 // print_r($data);
 // echo "<pre>";
@@ -119,7 +122,9 @@ class StudentsInfoController extends Controller
                 'name' => $request->parent_a_username,
                 'email' => $request->parent_a_email,
                 'password' => bcrypt($request->parent_a_password), 
-                'menuroles' => 'parent'
+                'menuroles' => 'parent',
+                'status' => 1,
+                'created_at' => date('Y-m-d H:i:s')
             ]);
   
             $parent_info_a = DB::table('users_parent_infos')->insertGetId([ 
@@ -128,14 +133,16 @@ class StudentsInfoController extends Controller
                 'telephone' => $request->parent_a_telephone,
                 'line' => $request->parent_a_line,
                 'email' => $request->parent_a_email,
-                'status' => 1
+                'created_at' => date('Y-m-d H:i:s')
             ]);
 
             $parent_b_id = DB::table('users')->insertGetId([ 
                 'name' => $request->parent_b_username,
                 'email' => $request->parent_b_email,
                 'password' => bcrypt($request->parent_b_password), 
-                'menuroles' => 'parent'
+                'menuroles' => 'parent',
+                'status' => 1,
+                'created_at' => date('Y-m-d H:i:s')
             ]);
 
             $parent_info_b = DB::table('users_parent_infos')->insertGetId([ 
@@ -144,14 +151,16 @@ class StudentsInfoController extends Controller
                 'telephone' => $request->parent_b_telephone,
                 'line' => $request->parent_b_line,
                 'email' => $request->parent_b_email,
-                'status' => 1
+                'created_at' => date('Y-m-d H:i:s')
             ]);
 
             $student_id = DB::table('users')->insertGetId([ 
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => bcrypt($request->password), 
-                'menuroles' => 'student'
+                'menuroles' => 'student',
+                'status' => 1,
+                'created_at' => date('Y-m-d H:i:s')
             ]);
 
             $student = DB::table('users_student_infos')->insert([
@@ -165,7 +174,7 @@ class StudentsInfoController extends Controller
                 'other' => $request->other,
                 'start_date' => $request->start_date,
                 'expire_date' => $request->expire_date,
-                'status' => 1
+                'created_at' => date('Y-m-d H:i:s')
             ]);
 
             DB::commit();
@@ -226,6 +235,16 @@ class StudentsInfoController extends Controller
 
         if($validator->fails()){
             return redirect(route('students.index'));
+        }
+
+        if($request->password){
+            $validator = Validator::make($request->password, [
+                'password' => 'required|string|min:6',
+            ]);
+
+            if($validator->fails()){
+                return redirect(route('students.index'));
+            }
         }
 
         if($request->parent_a_password){
@@ -299,13 +318,16 @@ class StudentsInfoController extends Controller
                 'expire_date' => $request->expire_date,
             ];
 
+            $studentAccount = [];
+            $studentAccount['email'] = $request->email;
+
             if($request->password){
-                $student_data['password'] = bcrypt($request->password);
+                $studentAccount['password'] = bcrypt($request->password);
             }
 
             DB::table('users')
             ->where('id', $request->student_user_id)
-            ->update(['email' => $request->email]);
+            ->update($studentAccount);
 
             DB::table('users_student_infos')
             ->where('id', $request->student_id)
