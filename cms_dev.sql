@@ -11,7 +11,7 @@
  Target Server Version : 80022
  File Encoding         : 65001
 
- Date: 17/12/2020 00:27:40
+ Date: 21/12/2020 20:32:35
 */
 
 SET NAMES utf8mb4;
@@ -823,7 +823,11 @@ COMMIT;
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `english_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `telephone` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `line` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -833,44 +837,23 @@ CREATE TABLE `users` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `status` tinyint(1) DEFAULT '1',
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `users_email_unique` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of users
 -- ----------------------------
 BEGIN;
-INSERT INTO `users` VALUES (1, 'admin', 'admin@admin.com', '2020-12-15 03:38:21', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', 'j0qbKXmiI6FFMr1q5DtX8BPoKS2ASimjPXcHM7OBI0aPICvttlZstbs0vXAE', '2020-12-15 03:38:21', '2020-12-15 03:38:21', NULL, 1);
-INSERT INTO `users` VALUES (6, 'test', 'tophet0929@gmail.com', NULL, '$2y$10$2zdhLPnCTLn0K/zihJBiz.1A5xHnlFCu07wrpuJLIlNB4g5F5SD5W', 'mywayAdmin', NULL, '2020-12-15 10:34:21', '2020-12-15 10:34:21', NULL, 1);
-INSERT INTO `users` VALUES (19, 'teachera', 'test@gmail.com', NULL, '$2y$10$ApZ2vlv1bixjyb9180oMHefnKt1fF7SQRjZLObJuhVHZA/zR6bDIW', 'teacher', NULL, NULL, '2020-12-16 15:09:08', NULL, 1);
-INSERT INTO `users` VALUES (23, 'linba', 'linba@gmail.com', NULL, '$2y$10$RzpGqnPx3ipAQJmhhx451.27j6VhoCUSpBuXz/Zm0jxm7jcuyeTSS', 'parent', NULL, '2020-12-16 16:26:04', NULL, NULL, 1);
-INSERT INTO `users` VALUES (24, 'linma', 'linma@gmail.com', NULL, '$2y$10$d9uz1Z5HNK/5oyYhLiTrxe/.S/VMoi9LGB1993coxPTaKx4UzEQD2', 'parent', NULL, '2020-12-16 16:26:04', NULL, NULL, 1);
-INSERT INTO `users` VALUES (25, 'linbo', 'linbo@gmail.com', NULL, '$2y$10$xkJc3fqvsIwejWr3fRNnLOpExLh4eddWAY2dzTr2CMdhvWetGQz9e', 'student', NULL, '2020-12-16 16:26:04', NULL, NULL, 1);
-COMMIT;
-
--- ----------------------------
--- Table structure for users_parent_infos
--- ----------------------------
-DROP TABLE IF EXISTS `users_parent_infos`;
-CREATE TABLE `users_parent_infos` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int DEFAULT NULL COMMENT '使用者ID',
-  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '家長姓名_1',
-  `line` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT 'Line',
-  `telephone` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '電話',
-  `created_at` timestamp NULL DEFAULT NULL COMMENT '建立日期',
-  `update_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最後更新日期',
-  `email` varchar(255) DEFAULT NULL COMMENT '家長信箱_1',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of users_parent_infos
--- ----------------------------
-BEGIN;
-INSERT INTO `users_parent_infos` VALUES (19, 23, '林爸', 'linba', '0912345678', '2020-12-16 16:26:04', NULL, 'linba@gmail.com');
-INSERT INTO `users_parent_infos` VALUES (20, 24, '林媽', 'linma', '0987654321', '2020-12-16 16:26:04', NULL, 'linma@gmail.com');
+INSERT INTO `users` VALUES (1, 'admin', NULL, NULL, NULL, NULL, 'admin@admin.com', '2020-12-15 03:38:21', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', 'j0qbKXmiI6FFMr1q5DtX8BPoKS2ASimjPXcHM7OBI0aPICvttlZstbs0vXAE', '2020-12-15 03:38:21', '2020-12-15 03:38:21', NULL, 1);
+INSERT INTO `users` VALUES (6, 'test', NULL, NULL, NULL, NULL, 'tophet0929@gmail.com', NULL, '$2y$10$2zdhLPnCTLn0K/zihJBiz.1A5xHnlFCu07wrpuJLIlNB4g5F5SD5W', 'mywayAdmin', NULL, '2020-12-15 10:34:21', '2020-12-15 10:34:21', NULL, 1);
+INSERT INTO `users` VALUES (19, 'teachera', NULL, NULL, NULL, NULL, 'test@gmail.com', NULL, '$2y$10$ApZ2vlv1bixjyb9180oMHefnKt1fF7SQRjZLObJuhVHZA/zR6bDIW', 'teacher', NULL, NULL, '2020-12-16 15:09:08', NULL, 1);
+INSERT INTO `users` VALUES (23, 'linba', NULL, '0912345678', 'linba', NULL, 'linba@gmail.com', NULL, '$2y$10$RzpGqnPx3ipAQJmhhx451.27j6VhoCUSpBuXz/Zm0jxm7jcuyeTSS', 'parent', NULL, '2020-12-16 16:26:04', NULL, NULL, 1);
+INSERT INTO `users` VALUES (24, 'linma', 'linma', '0912345678', 'linma', 'ss', 'linma@gmail.com', NULL, '$2y$10$d9uz1Z5HNK/5oyYhLiTrxe/.S/VMoi9LGB1993coxPTaKx4UzEQD2', 'parent', NULL, '2020-12-16 16:26:04', '2020-12-21 11:33:58', NULL, 1);
+INSERT INTO `users` VALUES (25, '林寶', 'linbo', NULL, 'linbo', NULL, 'linbo@gmail.com', NULL, '$2y$10$xkJc3fqvsIwejWr3fRNnLOpExLh4eddWAY2dzTr2CMdhvWetGQz9e', 'student', NULL, '2020-12-16 16:26:04', '2020-12-21 11:51:44', NULL, 1);
+INSERT INTO `users` VALUES (26, 'Q爸', NULL, '0912345678', 'qba', NULL, 'qba@gmail.com', NULL, '$2y$10$r6a55yCQJumWUtyabVMwsO.L6tZir1iHak/DnMIeD6CJBxfKUUlni', 'parent', NULL, '2020-12-21 12:31:53', NULL, NULL, 1);
+INSERT INTO `users` VALUES (27, 'Q媽', NULL, '0987654321', 'qma', NULL, 'qma@gmail.com', NULL, '$2y$10$jvT43le9mr8zJA3SVONJ1ObVVKR3/bKBcWTf1XNfzf4dKwE38ouQy', 'parent', NULL, '2020-12-21 12:31:53', NULL, NULL, 1);
+INSERT INTO `users` VALUES (28, 'Q寶', 'QQ', NULL, 'qbo', NULL, 'qbo@gmail.com', NULL, '$2y$10$iAuDWo1ogI9/0lQdcHHvOO3kcajlKNX4RpXaYz/MncaWEqf0AKWpO', 'student', NULL, '2020-12-21 12:31:53', NULL, NULL, 1);
 COMMIT;
 
 -- ----------------------------
@@ -881,9 +864,6 @@ CREATE TABLE `users_student_infos` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int DEFAULT NULL COMMENT '使用者ID',
   `class_id` int DEFAULT NULL COMMENT '班級ID',
-  `chinese_name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '中文姓名',
-  `english_name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '英文姓名',
-  `line` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT 'Line',
   `parent_1_id` int DEFAULT NULL COMMENT '家長_1_ID',
   `parent_2_id` int DEFAULT NULL COMMENT '家長_2_ID',
   `other` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '備註',
@@ -892,37 +872,14 @@ CREATE TABLE `users_student_infos` (
   `created_at` timestamp NULL DEFAULT NULL COMMENT '建立日期',
   `update_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最後更新日期',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of users_student_infos
 -- ----------------------------
 BEGIN;
-INSERT INTO `users_student_infos` VALUES (4, 25, NULL, '林學生', 'Linbo', 'linbo', 19, 20, 'otherdd', '2020-12-18', '2020-12-31', '2020-12-16 16:26:04', '2020-12-17 00:26:32');
-COMMIT;
-
--- ----------------------------
--- Table structure for users_teacher_infos
--- ----------------------------
-DROP TABLE IF EXISTS `users_teacher_infos`;
-CREATE TABLE `users_teacher_infos` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int DEFAULT NULL COMMENT '使用者ID',
-  `chinese_name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '中文名字',
-  `english_name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '英文名字',
-  `address` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '地址',
-  `telephone` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '電話',
-  `line` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT 'Line',
-  `created_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '建立日期',
-  `update_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最後更新日期',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of users_teacher_infos
--- ----------------------------
-BEGIN;
-INSERT INTO `users_teacher_infos` VALUES (2, 19, '老老師', 'Teacher', 'aaa', '0912345678', 'teacheryo', '2020-12-16 23:09:08', '2020-12-16 15:09:08');
+INSERT INTO `users_student_infos` VALUES (4, 25, NULL, 23, 24, 'otherss', '2020-12-18', '2020-12-31', '2020-12-16 16:26:04', '2020-12-21 20:25:41');
+INSERT INTO `users_student_infos` VALUES (5, 28, NULL, 26, 27, 'p', '2020-12-22', '2020-12-31', '2020-12-21 12:31:53', NULL);
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;

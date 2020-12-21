@@ -65,7 +65,7 @@
                             @foreach($students as $student)
                                 <tr>
                                     <td>{{ $student['student']->id }}</td>
-                                    <td><a href="#editform_{{$student['student']->id}}" class="blue btn-add">{{ $student['student']->chinese_name }}</a></td>
+                                    <td><a href="#editform_{{$student['student']->id}}" class="blue btn-add">{{ $student['student']->name }}</a></td>
                                     <td>{{ $student['student']->start_date }}</td>
                                     <td>{{ $student['student']->email }}</td>
                                     <td>{{ $student['student']->line }}</td>
@@ -98,7 +98,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 學生姓名 </label>
             <div class="col-sm-9">
-                <input type="text" name="chinese_name" id="form-field-1" class="form-control" required />
+                <input type="text" name="name" id="form-field-1" class="form-control" required />
             </div>
         </div>
         <div class="form-group">
@@ -114,21 +114,15 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 學生帳號 </label>
+            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 學生帳號/信箱 </label>
             <div class="col-sm-9">
-                <input type="text" name="name" id="form-field-1" class="form-control" required />
+                <input type="text" name="email" id="form-field-1" class="form-control" required />
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 學生密碼 </label>
             <div class="col-sm-9">
                 <input type="password" name="password" id="form-field-1" class="form-control" required />
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 學生信箱 </label>
-            <div class="col-sm-9">
-                <input type="email" name="email" id="form-field-1" class="form-control" required />
             </div>
         </div>
         <div class="form-group">
@@ -144,21 +138,15 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 家長帳號1 </label>
+            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 家長帳號/信箱1 </label>
             <div class="col-sm-9">
-                <input type="text" name="parent_a_username" id="form-field-1" class="form-control" required />
+                <input type="text" name="parent_a_email" id="form-field-1" class="form-control" required />
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 家長密碼1 </label>
             <div class="col-sm-9">
                 <input type="password" name="parent_a_password" id="form-field-1" class="form-control" required />
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 家長信箱1 </label>
-            <div class="col-sm-9">
-                <input type="email" name="parent_a_email" id="form-field-1" class="form-control" required />
             </div>
         </div>
         <div class="form-group">
@@ -180,21 +168,15 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 家長帳號2 </label>
+            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 家長帳號/信箱2 </label>
             <div class="col-sm-9">
-                <input type="text" name="parent_b_username" id="form-field-1" class="form-control" required />
+                <input type="text" name="parent_b_email" id="form-field-1" class="form-control" required />
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 家長密碼2 </label>
             <div class="col-sm-9">
                 <input type="password" name="parent_b_password" id="form-field-1" class="form-control" required />
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 家長信箱2 </label>
-            <div class="col-sm-9">
-                <input type="email" name="parent_b_email" id="form-field-1" class="form-control" required />
             </div>
         </div>
         <div class="form-group">
@@ -245,9 +227,7 @@
     <form class="form-horizontal" role="form" action="{{ route('students.update',$student['student']->id)}}" method="post">
         @csrf
         @method('PUT')
-        <input type="hidden" name="parent_a_user_id" id="form-field-1" value="{{ $student['parents'][0]->user_id }}" class="form-control" required />
         <input type="hidden" name="parent_a_id" id="form-field-1" value="{{ $student['parents'][0]->id }}" class="form-control" required />
-        <input type="hidden" name="parent_b_user_id" id="form-field-1" value="{{ $student['parents'][1]->user_id }}" class="form-control" required />
         <input type="hidden" name="parent_b_id" id="form-field-1" value="{{ $student['parents'][1]->id }}" class="form-control" required />
         <input type="hidden" name="student_id" id="form-field-1" value="{{ $student['student']->id }}" class="form-control" required />
         <input type="hidden" name="student_user_id" id="form-field-1" value="{{ $student['student']->user_id }}" class="form-control" required />
@@ -255,7 +235,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 學生姓名 </label>
             <div class="col-sm-9">
-                <input type="text" name="chinese_name" id="form-field-1" value="{{ $student['student']->chinese_name }}" class="form-control" required />
+                <input type="text" name="name" id="form-field-1" value="{{ $student['student']->name }}" class="form-control" required />
             </div>
         </div>
         <div class="form-group">
@@ -271,21 +251,15 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 學生帳號 </label>
+            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 學生帳號/信箱 </label>
             <div class="col-sm-9">
-                <input type="text" name="name" id="form-field-1" value="{{ $student['student']->name }}" class="form-control" required disabled/>
+                <input type="text" name="email" id="form-field-1" value="{{ $student['student']->email }}" class="form-control" required/>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 學生密碼 </label>
             <div class="col-sm-9">
                 <input type="password" name="password" id="form-field-1" class="form-control" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 學生信箱 </label>
-            <div class="col-sm-9">
-                <input type="email" name="email" id="form-field-1" value="{{ $student['student']->email }}" class="form-control" required />
             </div>
         </div>
         <div class="form-group">
@@ -301,21 +275,15 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 家長帳號1 </label>
+            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 家長帳號/信箱1 </label>
             <div class="col-sm-9">
-                <input type="text" name="parent_a_username" id="form-field-1" value="{{ $student['parents'][0]->account }}" class="form-control" required disabled/>
+                <input type="text" name="parent_a_email" id="form-field-1" value="{{ $student['parents'][0]->email }}" class="form-control" required/>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 家長密碼1 </label>
             <div class="col-sm-9">
                 <input type="password" name="parent_a_password" id="form-field-1" class="form-control" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 家長信箱1 </label>
-            <div class="col-sm-9">
-                <input type="email" name="parent_a_email" id="form-field-1" value="{{ $student['parents'][0]->email }}" class="form-control" required />
             </div>
         </div>
         <div class="form-group">
@@ -337,21 +305,15 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 家長帳號2 </label>
+            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 家長帳號/信箱2 </label>
             <div class="col-sm-9">
-                <input type="text" name="parent_b_username" id="form-field-1" value="{{ $student['parents'][1]->account}}" class="form-control" required disabled/>
+                <input type="text" name="parent_b_email" id="form-field-1" value="{{ $student['parents'][1]->email}}" class="form-control" required/>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 家長密碼2 </label>
             <div class="col-sm-9">
                 <input type="password" name="parent_b_password" id="form-field-1" class="form-control" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 家長信箱2 </label>
-            <div class="col-sm-9">
-                <input type="email" name="parent_b_email" id="form-field-1" value="{{ $student['parents'][1]->email}}" class="form-control" required />
             </div>
         </div>
         <div class="form-group">

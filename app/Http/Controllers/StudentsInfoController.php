@@ -21,17 +21,16 @@ class StudentsInfoController extends Controller
     {
         $students = DB::table('users_student_infos as s')
         ->join('users as u', 'u.id', '=', 's.user_id')
-        ->select('u.email', 'u.name', 's.*')
+        ->select('u.email', 'u.name', 'u.line', 'u.telephone', 'u.address', 'u.english_name', 's.*')
         ->get()
         ->toArray();
 
         $data = [];
         // dd($students);
         foreach($students as $key => $value){
-            $parent_a = DB::table('users_parent_infos as p')
-            ->join('users as u', 'u.id', '=', 'p.user_id')
-            ->where('p.id',$value->parent_1_id)
-            ->select('u.name as account', 'p.*')
+            $parent_a = DB::table('users')
+            ->where('id',$value->parent_1_id)
+            ->select('*')
             ->get()
             ->first();
 
@@ -39,12 +38,12 @@ class StudentsInfoController extends Controller
             $data[$key]['parents'][] = $parent_a; 
 
             if($value->parent_2_id){
-                $parent_b = DB::table('users_parent_infos as p')
-                ->join('users as u', 'u.id', '=', 'p.user_id')
-                ->where('p.id',$value->parent_2_id)
-                ->select('u.name as account', 'p.*')
+                $parent_b = DB::table('users')
+                ->where('id',$value->parent_2_id)
+                ->select('*')
                 ->get()
                 ->first();
+    
                 $data[$key]['parents'][] = $parent_b;
             }
         }
@@ -73,26 +72,22 @@ class StudentsInfoController extends Controller
      */
     public function store(Request $request)
     {
-        $userAccount = User::whereIn('name', [$request->name,$request->parent_a_username,$request->parent_b_username])
-            ->first();
-
         if (!empty($userAccount)) {
             return redirect(route('students.index'));
         }
 
         $validator = Validator::make($request->all(), [
-            'parent_a_username' => 'required|string|between:2,100|unique:users,name',
             'parent_a_name' => 'required|string|max:100',
             'parent_a_email' => 'required|string|email|max:100|unique:users,email',
             'parent_a_password' => 'required|string|min:6',
+            'parent_a_telephone' => 'required|string|max:100',
             'parent_a_line' => 'required|string|max:100',
-            'parent_b_username' => 'required|string|between:2,100|unique:users,name',
             'parent_b_name' => 'required|string|max:100',
             'parent_b_email' => 'required|string|email|max:100|unique:users,email',
             'parent_b_password' => 'required|string|min:6',
+            'parent_b_telephone' => 'required|string|max:100',
             'parent_b_line' => 'required|string|max:100',
-            'name' => 'required|string|between:2,100|unique:users,name',
-            'chinese_name' => 'required|string|max:100',
+            'name' => 'required|string|max:100',
             'english_name' => 'required|string|max:100',
             'email' => 'required|string|email|max:100|unique:users,email',
             'password' => 'required|string|min:6',
@@ -110,58 +105,47 @@ class StudentsInfoController extends Controller
             DB::beginTransaction();
             
             $parent_a_id = DB::table('users')->insertGetId([ 
-                'name' => $request->parent_a_username,
+                'name' => $request->parent_a_name,
+                'english_name' => $request->parent_a_english_name,
                 'email' => $request->parent_a_email,
                 'password' => bcrypt($request->parent_a_password), 
-                'menuroles' => 'parent',
-                'status' => 1,
-                'created_at' => date('Y-m-d H:i:s')
-            ]);
-  
-            $parent_info_a = DB::table('users_parent_infos')->insertGetId([ 
-                'user_id' => $parent_a_id,
-                'name' => $request->parent_a_name,
                 'telephone' => $request->parent_a_telephone,
                 'line' => $request->parent_a_line,
-                'email' => $request->parent_a_email,
-                'created_at' => date('Y-m-d H:i:s')
+                'menuroles' => 'parent',
+                'status' => 1,
+                'created_at' => date('Y-m-d H:i:s'),
             ]);
 
             $parent_b_id = DB::table('users')->insertGetId([ 
-                'name' => $request->parent_b_username,
+                'name' => $request->parent_b_name,
+                'english_name' => $request->parent_b_english_name,
                 'email' => $request->parent_b_email,
                 'password' => bcrypt($request->parent_b_password), 
-                'menuroles' => 'parent',
-                'status' => 1,
-                'created_at' => date('Y-m-d H:i:s')
-            ]);
-
-            $parent_info_b = DB::table('users_parent_infos')->insertGetId([ 
-                'user_id' => $parent_b_id,
-                'name' => $request->parent_b_name,
                 'telephone' => $request->parent_b_telephone,
                 'line' => $request->parent_b_line,
-                'email' => $request->parent_b_email,
-                'created_at' => date('Y-m-d H:i:s')
+                'menuroles' => 'parent',
+                'status' => 1,
+                'created_at' => date('Y-m-d H:i:s'),
             ]);
 
             $student_id = DB::table('users')->insertGetId([ 
                 'name' => $request->name,
+                'english_name' => $request->english_name,
                 'email' => $request->email,
                 'password' => bcrypt($request->password), 
+                'telephone' => $request->telephone,
+                'line' => $request->line,
+                'address' => $request->address,
                 'menuroles' => 'student',
                 'status' => 1,
-                'created_at' => date('Y-m-d H:i:s')
+                'created_at' => date('Y-m-d H:i:s'),
             ]);
 
             $student = DB::table('users_student_infos')->insert([
                 'user_id' => $student_id,
                 'class_id' => $request->class_id ? $request->class_id : null,
-                'chinese_name' => $request->chinese_name,
-                'english_name' => $request->english_name,
-                'line' => $request->line,
-                'parent_1_id' => $parent_info_a,
-                'parent_2_id' => $parent_info_b ? $parent_info_b : null,
+                'parent_1_id' => $parent_a_id,
+                'parent_2_id' => $parent_b_id ? $parent_b_id : null,
                 'other' => $request->other,
                 'start_date' => $request->start_date,
                 'expire_date' => $request->expire_date,
@@ -212,10 +196,12 @@ class StudentsInfoController extends Controller
             'parent_a_name' => 'required|string|max:100',
             'parent_a_email' => 'required|string|email|max:100',
             'parent_a_line' => 'required|string|max:100',
+            'parent_a_telephone' => 'required|string|max:100',
             'parent_b_name' => 'required|string|max:100',
             'parent_b_email' => 'required|string|email|max:100',
             'parent_b_line' => 'required|string|max:100',
-            'chinese_name' => 'required|string|max:100',
+            'parent_b_telephone' => 'required|string|max:100',
+            'name' => 'required|string|max:100',
             'english_name' => 'required|string|max:100',
             'email' => 'required|string|email|max:100',
             'line' => 'required|string|max:100',
@@ -262,48 +248,33 @@ class StudentsInfoController extends Controller
             DB::beginTransaction();
             
             //更新父母Ａ資料
-            $parent_a_data['email'] = $request->parent_a_email;
-
-            if($request->parent_a_password){
-                $parent_a_data['password'] = bcrypt($request->parent_a_password);
-            }
-
-            DB::table('users')
-            ->where('id', $request->parent_a_user_id)
-            ->update($parent_a_data);
-
             $parent_a_data['name'] = $request->parent_a_name;
             $parent_a_data['line'] = $request->parent_a_line;
             $parent_a_data['telephone'] = $request->parent_a_telephone;
 
-            DB::table('users_parent_infos')
+            if($request->parent_a_password){
+                $parent_a_data['password'] = Hash::make($request->parent_a_password);
+            }
+
+            DB::table('users')
             ->where('id', $request->parent_a_id)
             ->update($parent_a_data);
 
             //更新父母B資料
-            $parent_b_data['email'] = $request->parent_b_email;
-
-            if($request->parent_b_password){
-                $parent_b_data['password'] = bcrypt($request->parent_b_password);
-            }
-
-            DB::table('users')
-            ->where('id', $request->parent_b_user_id)
-            ->update($parent_b_data);
-
             $parent_b_data['name'] = $request->parent_b_name;
             $parent_b_data['line'] = $request->parent_b_line;
             $parent_b_data['telephone'] = $request->parent_b_telephone;
 
-            DB::table('users_parent_infos')
+            if($request->parent_b_password){
+                $parent_b_data['password'] = Hash::make($request->parent_b_password);
+            }
+
+            DB::table('users')
             ->where('id', $request->parent_b_id)
             ->update($parent_b_data);
 
             //更新學生
             $student_data = [
-                'chinese_name' => $request->chinese_name,
-                'english_name' => $request->english_name,
-                'line' => $request->line,
                 'other' => $request->other,
                 'start_date' => $request->start_date,
                 'expire_date' => $request->expire_date,
@@ -311,9 +282,14 @@ class StudentsInfoController extends Controller
 
             $studentAccount = [];
             $studentAccount['email'] = $request->email;
+            $studentAccount['name'] = $request->name;
+            $studentAccount['english_name'] = $request->english_name;
+            $studentAccount['line'] = $request->line;
+            $studentAccount['telephone'] = $request->telephone;
+            $studentAccount['address'] = $request->address;
 
             if($request->password){
-                $studentAccount['password'] = bcrypt($request->password);
+                $studentAccount['password'] = Hash::make($request->password);
             }
 
             DB::table('users')
