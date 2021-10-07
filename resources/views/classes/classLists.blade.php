@@ -460,7 +460,7 @@
     },
     computed: {
     },
-    mounted() {
+    created() {
       this.classes = @json($classes);
       this.schools = @json($branch_schools);
       this.branch_school_id = this.schools[0].id;
