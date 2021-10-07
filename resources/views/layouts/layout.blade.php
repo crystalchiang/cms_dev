@@ -297,5 +297,6 @@
                 $(".btn-add, .btn-edit").fancybox();
 			});
 		</script>
+		@yield('javascript')
 	</body>
 </html>
